@@ -28,7 +28,7 @@ def init_llm():
 
     model_id = "tiiuae/falcon-7b-instruct"
     hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-    print(f"Hugging Face API Token: {hf_token}")
+    print(f"Hugging Face API Token: {hf_token[:4]}...{hf_token[-4:]}")  # Mask the token for security
 
     if not hf_token:
         raise ValueError("HUGGINGFACEHUB_API_TOKEN not found in environment variables!")
@@ -43,8 +43,6 @@ def init_llm():
         model_name="sentence-transformers/all-MiniLM-L6-v2",
         model_kwargs={"device": DEVICE}
     )
-
-
 
 
 
