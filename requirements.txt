@@ -19,3 +19,4 @@ lxml
 bs4
 langchain-community
 python-dotenv==1
+gunicorn==20.1.0
