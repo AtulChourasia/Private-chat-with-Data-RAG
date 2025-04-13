@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: chat-on-private-data
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-tmp-dir /dev/shm server:app
+    healthCheckPath: /
+    envVars:
+      - key: HUGGINGFACEHUB_API_TOKEN
+        fromSecret: huggingfacehub_api_token
