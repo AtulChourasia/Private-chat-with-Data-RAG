@@ -27,15 +27,11 @@ def init_llm():
     global llm_hub, embeddings
 
     model_id = "tiiuae/falcon-7b-instruct"
-    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-    print(f"Hugging Face API Token: {hf_token[:4]}...{hf_token[-4:]}")  # Mask the token for security
-
-    if not hf_token:
-        raise ValueError("HUGGINGFACEHUB_API_TOKEN not found in environment variables!")
+    
 
     llm_hub = HuggingFaceHub(
         repo_id=model_id,
-        huggingfacehub_api_token=hf_token,
+        huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
         model_kwargs={"temperature": 0.1, "max_new_tokens": 600, "max_length": 600}
     )
 
