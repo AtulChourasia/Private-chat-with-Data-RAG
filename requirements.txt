@@ -18,3 +18,4 @@ p4python
 lxml
 bs4
 langchain-community
+python-dotenv==1

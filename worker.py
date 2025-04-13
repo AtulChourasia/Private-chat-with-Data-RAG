@@ -7,7 +7,9 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.llms import HuggingFaceHub
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Check for GPU availability and set the appropriate device for computation.
 DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -19,19 +21,30 @@ llm_hub = None
 embeddings = None
 
 # Function to initialize the language model and its embeddings
+import os
+
 def init_llm():
     global llm_hub, embeddings
-    # Set up the environment variable for HuggingFace and initialize the desired model.
-    os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
-    # repo name for the model
-    model_id = "tiiuae/falcon-7b-instruct"
-    # load the model into the HuggingFaceHub
-    llm_hub = HuggingFaceHub(repo_id=model_id, model_kwargs={"temperature": 0.1, "max_new_tokens": 600, "max_length": 600})
 
-    #Initialize embeddings using a pre-trained model to represent the text data.
-    embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2", model_kwargs={"device": DEVICE}
+    model_id = "tiiuae/falcon-7b-instruct"
+    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+    print(f"Hugging Face API Token: {hf_token}")
+
+    if not hf_token:
+        raise ValueError("HUGGINGFACEHUB_API_TOKEN not found in environment variables!")
+
+    llm_hub = HuggingFaceHub(
+        repo_id=model_id,
+        huggingfacehub_api_token=hf_token,
+        model_kwargs={"temperature": 0.1, "max_new_tokens": 600, "max_length": 600}
     )
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_kwargs={"device": DEVICE}
+    )
+
+
 
 
 
